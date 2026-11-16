@@ -1,0 +1,44 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Pergunta {
+  id     String  @id @default(uuid())
+  numero Int     @unique
+  texto  String
+  opcoes Opcao[]
+}
+
+model Opcao {
+  id         String   @id @default(uuid())
+  letra      String
+  texto      String
+  scores     Json     // Armazena os pesos de cada eixo (ex: { CLAREZA: 2, EXEC: 1 })
+  perguntaId String
+  pergunta   Pergunta @relation(fields: [perguntaId], references: [id])
+}
+
+model Perfil {
+  id              String   @id @default(uuid())
+  nome            String
+  descricao       String
+  pesosReferencia Json     // Os pesos exatos para o sistema identificar esse arquétipo
+  criadoEm        DateTime @default(now())
+
+  leads           Lead[]
+}
+
+model Lead {
+  id        String   @id @default(uuid())
+  nome      String?
+  telefone  String?
+  criadoEm  DateTime @default(now())
+
+  perfilId  String?
+  perfil    Perfil?  @relation(fields: [perfilId], references: [id])
+}
