@@ -4,371 +4,526 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Clareza - Diagnóstico Empreendedor</title>
-  
+
   <!-- Biblioteca de Ícones (Iconify) -->
   <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
-  
+
   <!-- Fontes Google: Playfair Display (Títulos) e Inter (Textos) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  <style>/* ─────────────────────────────────────────────────────────────
+   RESET & VARIÁVEIS
+   ───────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg: #fcfcfd; /* Fundo quase branco */
-      --card-bg: #ffffff;
-      --text: #1c1c2e; /* Azul escuro quase preto */
-      --muted: #6b6b8a; /* Cinza arroxeado */
-      --primary: #4a4a8a; /* Azul/lavanda escuro */
-      --primary-hover: #35356a;
-      --accent: #8b8bc4; /* Lavanda claro */
-      --border: #e2e2eb;
-      --radius: 24px;
-      --shadow: 0 10px 40px rgba(74, 74, 138, 0.08); /* Sombra suave */
-    }
+:root {
+  --bg: #fcfcfd;
+  --card-bg: #ffffff;
+  --text: #1c1c2e;
+  --muted: #6b6b8a;
+  --primary: #4a4a8a;
+  --primary-hover: #35356a;
+  --accent: #8b8bc4;
+  --border: #e2e2eb;
+  --radius: 24px;
+  --shadow: 0 10px 40px rgba(74, 74, 138, 0.08);
+}
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      line-height: 1.6;
-      /* Fundo com degradê suave imitando a imagem */
-      background-image: 
-        radial-gradient(circle at 50% 100%, rgba(139, 139, 196, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 90% 10%, rgba(139, 139, 196, 0.1) 0%, transparent 30%);
-      background-attachment: fixed;
-    }
+/* ─────────────────────────────────────────────────────────────
+   BASE & BODY
+   ───────────────────────────────────────────────────────────── */
+html {
+  font-size: 16px; /* base para rem */
+  -webkit-text-size-adjust: 100%;
+}
 
-    /* ─── Container Principal ─── */
-    .app {
-      width: 100%;
-      max-width: 800px;
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 48px;
-      min-height: 500px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(226, 226, 235, 0.5);
-    }
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  min-height: 100dvh; /* mobile safe */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vw, 24px);
+  line-height: 1.6;
+  background-image:
+    radial-gradient(circle at 50% 100%, rgba(139, 139, 196, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 90% 10%, rgba(139, 139, 196, 0.1) 0%, transparent 30%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+}
 
-    /* ─── Tela Inicial (Intro) ─── */
-    .intro {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      animation: fadeInSlideUp 0.6s ease-out;
-    }
-    
-    /* Topo da tela inicial (Logo) */
-    .intro .logo-top {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.2rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      color: var(--primary);
-      margin-bottom: 40px;
-      text-transform: uppercase;
-    }
-    .intro .logo-top iconify-icon {
-      font-size: 2rem;
-      color: var(--primary);
-    }
+/* ─────────────────────────────────────────────────────────────
+   BOTÃO INVISÍVEL DE RESET
+   ───────────────────────────────────────────────────────────── */
+.reset-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 9999;
+  border-radius: 50%;
+  transition: background 0.2s, opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.15;
+}
+.reset-btn:hover {
+  opacity: 1;
+  background: rgba(74, 74, 138, 0.1);
+}
+.reset-btn iconify-icon {
+  font-size: 1.4rem;
+  color: var(--primary);
+}
 
-    .intro h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 3rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 20px;
-      line-height: 1.15;
-    }
-    
-    .intro p.subtitle {
-      color: var(--muted);
-      margin-bottom: 32px;
-      font-size: 1.15rem;
-      max-width: 600px;
-    }
+/* ─────────────────────────────────────────────────────────────
+   CONTAINER PRINCIPAL
+   ───────────────────────────────────────────────────────────── */
+.app {
+  width: 100%;
+  max-width: 800px;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(24px, 5vw, 48px);
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(226, 226, 235, 0.5);
+}
 
-    .intro ul {
-      list-style: none;
-      margin-bottom: 40px;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    
-    .intro ul li {
-      color: var(--text);
-      font-size: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .intro ul li iconify-icon {
-      color: var(--primary);
-      font-size: 1.4rem;
-      background: rgba(74, 74, 138, 0.08);
-      padding: 6px;
-      border-radius: 50%;
-    }
+/* ─────────────────────────────────────────────────────────────
+   TELA DE CARREGAMENTO
+   ───────────────────────────────────────────────────────────── */
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 28px;
+  animation: fadeIn 0.4s ease-out;
+  padding: clamp(20px, 5vw, 40px) 20px;
+}
 
-    /* ─── Pergunta (Quiz) ─── */
-    .question-container {
-      animation: fadeInSlideUp 0.4s ease-out;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-    
-    .header-question {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 32px;
-      font-size: 0.9rem;
-      color: var(--muted);
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .bar-container {
-      flex: 1;
-      height: 4px;
-      background: var(--border);
-      border-radius: 999px;
-      margin-left: 24px;
-      overflow: hidden;
-    }
-    .bar-fill {
-      height: 100%;
-      background: var(--primary);
-      width: 0%;
-      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      border-radius: 999px;
-    }
+.loading-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.loading-logo iconify-icon {
+  font-size: 2rem;
+  animation: sparkle 2s ease-in-out infinite;
+}
 
-    .question-image {
-      width: 100%;
-      height: 140px;
-      border-radius: 16px;
-      margin-bottom: 32px;
-      background-size: cover;
-      background-position: center;
-      position: relative;
-    }
-    
-    /* Overlay mais suave na imagem */
-    .question-image::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to right, rgba(255,255,255,0.1), rgba(255,255,255,0.4));
-      border-radius: 16px;
-    }
+.loading-spinner {
+  width: clamp(48px, 10vw, 64px);
+  height: clamp(48px, 10vw, 64px);
+  border: 4px solid rgba(74, 74, 138, 0.1);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
 
-    .question h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-      font-weight: 600;
-      margin-bottom: 32px;
-      line-height: 1.3;
-      color: var(--text);
-    }
+.loading-text {
+  text-align: center;
+}
+.loading-text h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.loading-text p {
+  color: var(--muted);
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+}
 
-    .options {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+.loading-bar {
+  width: 100%;
+  max-width: 320px;
+  height: 4px;
+  background: rgba(74, 74, 138, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.loading-bar::after {
+  content: '';
+  position: absolute;
+  left: -40%;
+  top: 0;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  border-radius: 999px;
+  animation: loadingBar 1.6s ease-in-out infinite;
+}
 
-    .option {
-      text-align: left;
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px 24px;
-      font-size: 1.05rem;
-      color: var(--text);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      font-family: 'Inter', sans-serif;
-    }
-    .option:hover {
-      background: #f8f8fc;
-      border-color: var(--accent);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(74, 74, 138, 0.06);
-    }
-    
-    .option .icon-box {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      background: #f0f0f7;
-      border-radius: 12px;
-      color: var(--primary);
-      flex-shrink: 0;
-      transition: all 0.2s ease;
-    }
-    .option:hover .icon-box {
-      background: var(--primary);
-      color: #fff;
-      transform: scale(1.05);
-    }
-    .option .icon-box iconify-icon {
-      font-size: 1.5rem;
-    }
+/* ─────────────────────────────────────────────────────────────
+   TELA INICIAL (INTRO)
+   ───────────────────────────────────────────────────────────── */
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  animation: fadeInSlideUp 0.6s ease-out;
+}
 
-    /* ─── Botões ─── */
-    .btn {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: 999px; /* Botões arredondados */
-      padding: 18px 36px;
-      font-size: 1.05rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: 'Inter', sans-serif;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      box-shadow: 0 4px 12px rgba(74, 74, 138, 0.2);
-      margin-top: 10px;
-    }
-    .btn:hover {
-      background: var(--primary-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(74, 74, 138, 0.3);
-    }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-    .btn-full { width: 100%; }
+.intro .logo-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+  margin-bottom: clamp(24px, 5vw, 40px);
+  text-transform: uppercase;
+}
+.intro .logo-top iconify-icon {
+  font-size: 2rem;
+  color: var(--primary);
+}
 
-    /* ─── Inputs ─── */
-    .input-group {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-    .input-field {
-      padding: 18px 24px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      font-size: 1rem;
-      font-family: 'Inter', sans-serif;
-      background: #fcfcfd;
-      color: var(--text);
-      transition: all 0.2s;
-    }
-    .input-field:focus {
-      outline: none;
-      border-color: var(--primary);
-      background: #fff;
-      box-shadow: 0 0 0 4px rgba(74, 74, 138, 0.1);
-    }
-    .input-field::placeholder { color: var(--muted); }
+.intro h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 6vw, 3rem);
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: clamp(12px, 3vw, 20px);
+  line-height: 1.15;
+}
 
-    /* ─── Resultado ─── */
-    .resultado {
-      animation: fadeInSlideUp 0.6s ease-out;
-    }
-    .resultado .analise {
-      color: var(--text);
-      font-size: 1.05rem;
-      line-height: 1.8;
-      margin-bottom: 40px;
-    }
-    .resultado .analise h3 {
-      font-family: 'Playfair Display', serif;
-      color: var(--primary);
-      font-size: 2rem;
-      margin-top: 32px;
-      margin-bottom: 16px;
-      font-weight: 600;
-    }
-    .resultado .analise p {
-      margin-bottom: 20px;
-    }
-    .resultado .analise strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-    .resultado .analise hr {
-      border: 0;
-      border-top: 1px solid var(--border);
-      margin: 40px 0;
-    }
-    .resultado .analise em {
-      color: var(--muted);
-      font-style: italic;
-    }
+.intro p.subtitle {
+  color: var(--muted);
+  margin-bottom: clamp(20px, 4vw, 32px);
+  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+  max-width: 600px;
+}
 
-    /* ─── Loading / Erro ─── */
-    .center {
-      text-align: center;
-      margin: auto;
-      color: var(--muted);
-    }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 20px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    
-    .erro {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #b91c1c;
-      padding: 16px 24px;
-      border-radius: 12px;
-      font-size: 0.95rem;
-      margin-bottom: 24px;
-    }
+.intro ul {
+  list-style: none;
+  margin-bottom: clamp(24px, 5vw, 40px);
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(10px, 2vw, 16px);
+}
+@media (min-width: 480px) {
+  .intro ul { grid-template-columns: 1fr 1fr; }
+}
 
-    /* ─── Animações ─── */
-    @keyframes fadeInSlideUp {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+.intro ul li {
+  color: var(--text);
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.intro ul li iconify-icon {
+  color: var(--primary);
+  font-size: 1.4rem;
+  background: rgba(74, 74, 138, 0.08);
+  padding: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
 
-    @media (max-width: 600px) {
-      .app { padding: 32px 24px; }
-      .intro h1 { font-size: 2.2rem; }
-      .question h2 { font-size: 1.5rem; }
-      .intro ul { grid-template-columns: 1fr; }
-    }
-  </style>
+/* ─────────────────────────────────────────────────────────────
+   PERGUNTA (QUIZ)
+   ───────────────────────────────────────────────────────────── */
+.question-container {
+  animation: fadeInSlideUp 0.4s ease-out;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.header-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: clamp(20px, 4vw, 32px);
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
+  color: var(--muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  gap: 12px;
+}
+
+.bar-container {
+  flex: 1;
+  height: 4px;
+  background: var(--border);
+  border-radius: 999px;
+  margin-left: clamp(12px, 3vw, 24px);
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  background: var(--primary);
+  width: 0%;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 999px;
+}
+
+.question-image {
+  width: 100%;
+  height: clamp(100px, 20vw, 160px);
+  border-radius: 16px;
+  margin-bottom: clamp(20px, 4vw, 32px);
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.question-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(255,255,255,0.1), rgba(255,255,255,0.4));
+  border-radius: 16px;
+}
+
+.question h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.15rem, 4vw, 1.8rem);
+  font-weight: 600;
+  margin-bottom: clamp(20px, 4vw, 32px);
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 12px);
+}
+
+.option {
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(14px, 3vw, 20px) clamp(16px, 3.5vw, 24px);
+  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  gap: clamp(12px, 3vw, 20px);
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+}
+.option:hover {
+  background: #f8f8fc;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(74, 74, 138, 0.06);
+}
+
+.option .icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(36px, 8vw, 44px);
+  height: clamp(36px, 8vw, 44px);
+  background: #f0f0f7;
+  border-radius: 12px;
+  color: var(--primary);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.option:hover .icon-box {
+  background: var(--primary);
+  color: #fff;
+  transform: scale(1.05);
+}
+.option .icon-box iconify-icon {
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BOTÕES
+   ───────────────────────────────────────────────────────────── */
+.btn {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: clamp(14px, 3vw, 18px) clamp(24px, 5vw, 36px);
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(74, 74, 138, 0.2);
+  margin-top: 10px;
+  text-align: center;
+  line-height: 1.3;
+}
+.btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(74, 74, 138, 0.3);
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-full {
+  width: 100%;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   INPUTS
+   ───────────────────────────────────────────────────────────── */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(10px, 2.5vw, 16px);
+  margin-bottom: clamp(20px, 4vw, 32px);
+  width: 100%;
+}
+.input-field {
+  padding: clamp(14px, 3vw, 18px) clamp(16px, 3.5vw, 24px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
+  font-family: 'Inter', sans-serif;
+  background: #fcfcfd;
+  color: var(--text);
+  transition: all 0.2s;
+  width: 100%;
+}
+.input-field:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(74, 74, 138, 0.1);
+}
+.input-field::placeholder {
+  color: var(--muted);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   RESULTADO
+   ───────────────────────────────────────────────────────────── */
+.resultado {
+  animation: fadeInSlideUp 0.6s ease-out;
+}
+.resultado .analise {
+  color: var(--text);
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+  line-height: 1.8;
+  margin-bottom: clamp(24px, 5vw, 40px);
+}
+.resultado .analise h3 {
+  font-family: 'Playfair Display', serif;
+  color: var(--primary);
+  font-size: clamp(1.3rem, 4vw, 2rem);
+  margin-top: clamp(20px, 4vw, 32px);
+  margin-bottom: clamp(8px, 2vw, 16px);
+  font-weight: 600;
+  line-height: 1.3;
+}
+.resultado .analise p {
+  margin-bottom: clamp(12px, 2.5vw, 20px);
+}
+.resultado .analise strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.resultado .analise hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: clamp(24px, 5vw, 40px) 0;
+}
+.resultado .analise em {
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ERRO
+   ───────────────────────────────────────────────────────────── */
+.erro {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  padding: clamp(12px, 3vw, 16px) clamp(16px, 3.5vw, 24px);
+  border-radius: 12px;
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+  margin-bottom: clamp(16px, 3vw, 24px);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ANIMAÇÕES
+   ───────────────────────────────────────────────────────────── */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInSlideUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes sparkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.2) rotate(15deg); opacity: 0.7; }
+}
+@keyframes loadingBar {
+  0% { left: -40%; }
+  100% { left: 100%; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   AJUSTES FINOS PARA TELAS MUITO PEQUENAS
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 360px) {
+  .app { padding: 20px 16px; }
+  .question-image { height: 90px; }
+  .option { padding: 12px 14px; gap: 10px; }
+  .option .icon-box { width: 32px; height: 32px; }
+  .btn { padding: 12px 20px; font-size: 0.9rem; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   AJUSTES PARA TELAS GRANDES (desktop wide)
+   ───────────────────────────────────────────────────────────── */
+@media (min-width: 1200px) {
+  .app { max-width: 880px; }
+}</style>
 </head>
 <body>
+  <!-- Botão invisível de reset (canto superior direito) -->
+  <button class="reset-btn" id="reset-btn" title="Resetar teste" aria-label="Resetar">
+    <iconify-icon icon="ph:arrow-counter-clockwise-bold"></iconify-icon>
+  </button>
+
   <main class="app" id="app"></main>
 
   <script>
@@ -391,7 +546,7 @@
 
     const app = document.getElementById('app');
 
-    // Ícones mantidos iguais
+    // ─── Ícones (mantidos iguais) ───
     const ICONES_PERGUNTAS = {
       1: { A: 'ph:anchor-bold', B: 'ph:stack-bold', C: 'ph:lightbulb-bold', D: 'ph:trend-up-bold' },
       2: { A: 'ph:users-bold', B: 'ph:currency-dollar-bold', C: 'ph:megaphone-bold', D: 'ph:compass-bold' },
@@ -408,7 +563,6 @@
       13: { A: 'ph:signpost-bold', B: 'ph:wallet-bold', C: 'ph:microphone-bold', D: 'ph:list-checks-bold' }
     };
 
-    // Imagens mantidas iguais
     const IMAGENS_FUNDO = [
       'https://images.unsplash.com/photo-1556761175-5973dc0f32b7?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1553729459-efe14ef6055d?q=80&w=1000&auto=format&fit=crop',
@@ -430,7 +584,7 @@
       localStorage.setItem('diag:indice', String(state.indice));
       localStorage.setItem(LS_INICIADO, state.iniciado ? '1' : '0');
     }
-    
+
     function carregarLocal() {
       try {
         state.respostas = JSON.parse(localStorage.getItem(LS_RESPOSTAS) || '{}');
@@ -443,12 +597,14 @@
         state.iniciado = false;
       }
     }
-    
+
     function limparLocal() {
       localStorage.removeItem(LS_RESPOSTAS);
       localStorage.removeItem('diag:indice');
       localStorage.removeItem(LS_PERGUNTAS);
       localStorage.removeItem(LS_INICIADO);
+      localStorage.removeItem(LS_NOME);
+      localStorage.removeItem(LS_TELEFONE);
     }
 
     async function carregarPerguntas() {
@@ -464,8 +620,15 @@
       }
 
       const resposta = await fetch('/api/perguntas');
+
+      // Valida se o servidor retornou JSON (evita quebrar se vier HTML)
+      const contentType = resposta.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        throw new Error('O servidor não retornou JSON. Verifique se a API está no ar.');
+      }
+
       if (!resposta.ok) throw new Error('Falha ao carregar perguntas (HTTP ' + resposta.status + ')');
-      
+
       const data = await resposta.json();
       if (!data.sucesso || !Array.isArray(data.perguntas)) {
         throw new Error('Formato de resposta inválido.');
@@ -487,8 +650,22 @@
     }
 
     function render() {
+      // ─── TELA DE CARREGAMENTO MELHORADA ───
       if (state.carregando) {
-        app.innerHTML = `<div class="center"><div class="spinner"></div><p>Preparando sua experiência…</p></div>`;
+        app.innerHTML = `
+          <div class="loading-screen">
+            <div class="loading-logo">
+              <iconify-icon icon="ph:sparkle-bold"></iconify-icon>
+              Clareza
+            </div>
+            <div class="loading-spinner"></div>
+            <div class="loading-text">
+              <h2>Preparando sua experiência</h2>
+              <p>Estamos carregando as perguntas e ajustando tudo para você…</p>
+            </div>
+            <div class="loading-bar"></div>
+          </div>
+        `;
         return;
       }
 
@@ -497,7 +674,7 @@
           <div class="intro">
             <h1>Ops, algo deu errado</h1>
             <div class="erro">${state.erro}</div>
-            <button class="btn btn-full" onclick="localStorage.clear(); location.reload()">Tentar Novamente</button>
+            <button class="btn btn-full" id="btn-tentar-novamente">Tentar Novamente</button>
           </div>
         `;
         return;
@@ -521,14 +698,14 @@
             </div>
             <h1>Descubra a clareza<br>que seu negócio precisa.</h1>
             <p class="subtitle">Responda a algumas perguntas e receba uma análise personalizada para entender seus bloqueios, alinhar suas escolhas e encontrar o próximo passo.</p>
-            
+
             <ul>
               <li><iconify-icon icon="ph:check-circle-bold"></iconify-icon> 13 perguntas rápidas</li>
               <li><iconify-icon icon="ph:check-circle-bold"></iconify-icon> Sem resposta "certa"</li>
               <li><iconify-icon icon="ph:check-circle-bold"></iconify-icon> Leva cerca de 5 minutos</li>
               <li><iconify-icon icon="ph:check-circle-bold"></iconify-icon> Seus dados estão seguros</li>
             </ul>
-            
+
             <button class="btn btn-full" id="btn-comecar">Iniciar Minha Jornada <iconify-icon icon="ph:arrow-right-bold"></iconify-icon></button>
           </div>
         `;
@@ -578,9 +755,9 @@
               <div class="bar-fill" style="width: ${progresso}%"></div>
             </div>
           </div>
-          
+
           <div class="question-image" style="background-image: url('${bgImage}')"></div>
-          
+
           <div class="question">
             <h2>${pergunta.texto}</h2>
             <div class="options">${opcoesHtml}</div>
@@ -593,7 +770,7 @@
       const btn = document.getElementById('btn-enviar');
       if (btn) {
         btn.disabled = true;
-        btn.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;margin:0 8px 0 0;border-top-color:#fff;"></div> Analisando...';
+        btn.innerHTML = '<div class="loading-spinner" style="width:20px;height:20px;border-width:2px;margin:0 8px 0 0;"></div> Analisando...';
       }
 
       const nome = document.getElementById('input-nome').value.trim();
@@ -610,6 +787,11 @@
           body: JSON.stringify({ respostasIds, nome, telefone }),
         });
 
+        const contentType = resposta.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+          throw new Error('Resposta inválida do servidor. Tente novamente.');
+        }
+
         const data = await resposta.json();
 
         if (!resposta.ok || !data.sucesso) {
@@ -624,6 +806,14 @@
         render();
       }
     }
+
+    // ─── Botão invisível de reset ───
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      const confirmar = confirm('Isso vai apagar todas as respostas e reiniciar o teste. Continuar?');
+      if (!confirmar) return;
+      limparLocal();
+      location.reload();
+    });
 
     app.addEventListener('click', (e) => {
       if (e.target.closest('#btn-comecar')) {
@@ -666,6 +856,12 @@
         render();
         return;
       }
+
+      if (e.target.closest('#btn-tentar-novamente')) {
+        limparLocal();
+        location.reload();
+        return;
+      }
     });
 
     (async function init() {
@@ -674,7 +870,7 @@
         await carregarPerguntas();
         state.carregando = false;
         if (state.indice > state.perguntas.length) {
-           state.indice = state.perguntas.length;
+          state.indice = state.perguntas.length;
         }
       } catch (err) {
         state.carregando = false;
