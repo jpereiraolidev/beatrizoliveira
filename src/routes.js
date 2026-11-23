@@ -2,8 +2,12 @@
 import { Router } from 'express';
 import { processar } from './processar.js';
 import prisma from './prisma.js';
+import { autenticarApiKey } from './auth.js'; // Importa o middleware
 
 const router = Router();
+
+// Aplica o middleware de autenticação a TODAS as rotas deste router
+router.use(autenticarApiKey); 
 
 // GET /perguntas — lista todas as perguntas com opções
 router.get('/perguntas', async (req, res) => {
