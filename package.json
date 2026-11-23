@@ -2,12 +2,12 @@
   "name": "beatrizoliveira",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
     "start": "node server.js",
-     "postinstall": "prisma generate"
+    "postinstall": "prisma generate"
   },
   "repository": {
     "type": "git",
@@ -21,15 +21,15 @@
     "url": "https://github.com/jpereiraolidev/beatrizoliveira/issues"
   },
   "homepage": "https://github.com/jpereiraolidev/beatrizoliveira#readme",
-  "devDependencies": {
-    "prisma": "^6.19.3"
-  },
   "dependencies": {
     "@prisma/client": "^6.19.3",
     "cors": "^2.8.6",
-    "dotenv": "^18.0.10",
-    "express": "^5.3.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "node-fetch": "^3.3.2",
+    "prisma": "^6.19.3"
+  },
+  "devDependencies": {
     "nodemon": "^3.1.14"
   }
 }
