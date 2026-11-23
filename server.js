@@ -22,14 +22,21 @@ app.set('trust proxy', 1);
 // ─────────────────────────────────────────────────────────────
 // 2. MIDDLEWARES GLOBAIS
 // ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────
+// 2. MIDDLEWARES GLOBAIS
+// ─────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: true, // aceita qualquer origem (ajuste para domínios específicos em produção)
+  origin: '*', // Permite qualquer origem acessar a API (ou substitua por domínios específicos se preferir)
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'x-api-key', 'Authorization'],
   credentials: true,
 }));
 
+// Garante resposta imediata para requisições OPTIONS (Preflight do CORS)
+app.options('*', cors());
+
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
-
 // ─────────────────────────────────────────────────────────────
 // 3. HEALTH CHECK (útil para Render, Railway, UptimeRobot etc.)
 // ─────────────────────────────────────────────────────────────
