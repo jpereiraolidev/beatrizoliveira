@@ -19,14 +19,12 @@ const app = express();
 // quando estiver atrás de load balancers / proxies.
 app.set('trust proxy', 1);
 
-// ─────────────────────────────────────────────────────────────
-// 2. MIDDLEWARES GLOBAIS
-// ─────────────────────────────────────────────────────────────
-// ─────────────────────────────────────────────────────────────
-// 2. MIDDLEWARES GLOBAIS
-// ─────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: '*', // Permite qualquer origem acessar a API (ou substitua por domínios específicos se preferir)
+  origin: [
+    'https://mapadaclarezabiaoli.vercel.app',
+    'http://localhost:5500',
+    'http://127.0.0.1:5500'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'x-api-key', 'Authorization'],
   credentials: true,
