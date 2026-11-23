@@ -1,15 +1,31 @@
 // src/routes.js
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import { processar } from './processar.js';
 import prisma from './prisma.js';
-import { autenticarApiKey } from './auth.js'; // Importa o middleware
 
 const router = Router();
 
-// Aplica o middleware de autenticação a TODAS as rotas deste router
-router.use(autenticarApiKey); 
+// ─────────────────────────────────────────────────────────────
+// RATE LIMIT — proteção contra abuso (spam de requisições)
+// ─────────────────────────────────────────────────────────────
+const limitador = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 30,                   // 30 requisições por IP por janela
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    sucesso: false,
+    erro: 'Muitas requisições. Aguarde alguns minutos e tente novamente.',
+  },
+});
 
+// Aplica rate limit a TODAS as rotas deste router
+router.use(limitador);
+
+// ─────────────────────────────────────────────────────────────
 // GET /perguntas — lista todas as perguntas com opções
+// ─────────────────────────────────────────────────────────────
 router.get('/perguntas', async (req, res) => {
   try {
     const perguntas = await prisma.pergunta.findMany({
@@ -31,10 +47,14 @@ router.get('/perguntas', async (req, res) => {
   }
 });
 
+// ─────────────────────────────────────────────────────────────
 // POST /processar-formulario
+// ─────────────────────────────────────────────────────────────
 router.post('/processar-formulario', processar);
 
+// ─────────────────────────────────────────────────────────────
 // 405 para métodos não permitidos
+// ─────────────────────────────────────────────────────────────
 router.all('/processar-formulario', (req, res) => {
   return res.status(405).json({
     sucesso: false,

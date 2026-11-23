@@ -4,7 +4,7 @@ import 'dotenv/config';
 // ─────────────────────────────────────────────────────────────
 // CONFIGURAÇÃO
 // ─────────────────────────────────────────────────────────────
-const BASE_URL = 'https://https://beatrizoliveira-murex.vercel.app/api';
+const BASE_URL = 'https://beatrizoliveira-sigma.vercel.app/api';
 const API_KEY = process.env.API_KEY || 'teste';
 
 // Cores para o terminal (Windows PowerShell aceita ANSI)
