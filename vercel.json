@@ -13,10 +13,8 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/server.js" },
-    { "src": "/perguntas", "dest": "/server.js" },
-    { "src": "/processar-formulario", "dest": "/server.js" },
-    { "src": "/(.*)", "dest": "/public/$1" }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/server.js" },
+    { "source": "/(.*)", "destination": "/public/$1" }
   ]
-} 
+}

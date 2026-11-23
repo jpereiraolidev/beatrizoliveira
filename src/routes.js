@@ -2,24 +2,6 @@
 import { Router } from 'express';
 import { processar } from './processar.js';
 import prisma from './prisma.js';
-const express = require('express');
-const cors = require('cors'); // 1. Importe o pacote cors
-
-const app = express();
-
-// 2. Configure o CORS ANTES das rotas
-// Para desenvolvimento, você pode permitir tudo:
-app.use(cors()); 
-
-// OU, para maior segurança, permita apenas origens específicas:
-// app.use(cors({
-//   origin: ['http://127.0.0.1:5500', 'https://seu-frontend.vercel.app'] 
-// }));
-
-// ... suas outras configurações (bodyParser, etc.)
-
-// 3. Suas rotas vêm DEPOIS do CORS
-app.use('/', require('./src/routes')); // Exemplo de como você importa suas rotas
 
 const router = Router();
 
